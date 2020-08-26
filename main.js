@@ -1,3 +1,5 @@
+// todo: round float to 2 decimal 
+
 const numBtns = document.querySelectorAll(".numBtn");
 const operatorBtns = document.querySelectorAll(".operatorBtn")
 const clearBtn = document.getElementById("clearBtn");
@@ -26,31 +28,25 @@ function storeDigit(e){
 }
 
 // store to operator variable
-// if firstNumber is null, 
-//      push currentString to firstNumber
-//      put cureent operator to operator
-// if firstNumber is not null and currentString is null
-//      user is choosing a new operator
-//      replace current operator with new operator
-// if firstNumber is not null and currentString is not null,
-//      push currentString to secondNumber
-//      clear currentString
-//      calculate and put answer into firstNumber
-//      put current operator choice to operator
-
 function storeOperator(e){
     if (e.target.value == "="){
-        if (firstNumber != null && operator != null){
+        if (firstNumber != null && currentString != ""){
             secondNumber = Number.parseFloat(currentString);
             currentString = "";
             firstNumber = operate(firstNumber, secondNumber, operator);
             secondNumber = null;
             operator = null;
             getDisplay();
+        } else if (firstNumber != null && currentString == ""){
+            operator = null;
+            getDisplay();
         }
         return;
     }
 
+    // if firstNumber is null, 
+    //      push currentString to firstNumber
+    //      put cureent operator to operator
     if (firstNumber == null){
         if (currentString != ""){
             firstNumber = Number.parseFloat(currentString);
@@ -59,9 +55,17 @@ function storeOperator(e){
         } else {
             return;
         }
-        
+    // if firstNumber is not null and currentString is null
+    //      user is choosing a new operator
+    //      replace current operator with new operator
     } else if (currentString == ""){
         operator = e.target.value;
+    
+    // if firstNumber is not null and currentString is not null,
+    //      push currentString to secondNumber
+    //      clear currentString
+    //      calculate and put answer into firstNumber
+    //      put current operator choice to operator
     } else {
         secondNumber = Number.parseFloat(currentString);
         currentString = "";
@@ -74,7 +78,6 @@ function storeOperator(e){
 
 function getDisplay(){
     var currentDisplay = "";
-    console.log(firstNumber, operator);
     if (firstNumber != null) {
         currentDisplay += firstNumber.toString();
     }
@@ -118,7 +121,8 @@ function multiply(firstNumber, secondNumber) {
 function divide(firstNumber, secondNumber) {
     if (secondNumber == 0){
         alert("you can't divide by 0!")
-        return null;
+        clear();
+        return;
     } else {
         return firstNumber/secondNumber;
     }
