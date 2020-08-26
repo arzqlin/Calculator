@@ -1,5 +1,7 @@
 const numBtns = document.querySelectorAll(".numBtn");
 const operatorBtns = document.querySelectorAll(".operatorBtn")
+const clearBtn = document.getElementById("clearBtn");
+
 // current input string, pending number
 var currentString = "";
 
@@ -14,6 +16,8 @@ numBtns.forEach(element => {
 operatorBtns.forEach(element => {
     element.addEventListener("click", storeOperator);
 })
+
+clearBtn.addEventListener("click", clear);
 
 // add this digit to the currentString and display 
 function storeDigit(e){
@@ -35,10 +39,27 @@ function storeDigit(e){
 //      put current operator choice to operator
 
 function storeOperator(e){
+    if (e.target.value == "="){
+        if (firstNumber != null && operator != null){
+            secondNumber = Number.parseFloat(currentString);
+            currentString = "";
+            firstNumber = operate(firstNumber, secondNumber, operator);
+            secondNumber = null;
+            operator = null;
+            getDisplay();
+        }
+        return;
+    }
+
     if (firstNumber == null){
-        firstNumber = Number.parseFloat(currentString);
-        currentString = "";
-        operator = e.target.value;
+        if (currentString != ""){
+            firstNumber = Number.parseFloat(currentString);
+            currentString = "";
+            operator = e.target.value;
+        } else {
+            return;
+        }
+        
     } else if (currentString == ""){
         operator = e.target.value;
     } else {
@@ -101,4 +122,12 @@ function divide(firstNumber, secondNumber) {
     } else {
         return firstNumber/secondNumber;
     }
+}
+
+function clear(){
+    firstNumber = null;
+    secondNumber = null;
+    operator = null;
+    currentString = "";
+    getDisplay();
 }
