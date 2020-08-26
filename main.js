@@ -1,4 +1,4 @@
-// todo: round float to 2 decimal 
+// to do: make divide by 0 only delete the 0 and prompt new input
 
 const numBtns = document.querySelectorAll(".numBtn");
 const operatorBtns = document.querySelectorAll(".operatorBtn")
@@ -33,14 +33,19 @@ function storeOperator(e){
         if (firstNumber != null && currentString != ""){
             secondNumber = Number.parseFloat(currentString);
             currentString = "";
-            firstNumber = operate(firstNumber, secondNumber, operator);
-            secondNumber = null;
-            operator = null;
-            getDisplay();
+            if (operate(firstNumber, secondNumber, operator) == "divideByZero"){
+                
+                
+                secondNumber = null;
+            } else {
+                firstNumber = operate(firstNumber, secondNumber, operator);
+                secondNumber = null;
+                operator = null;
+            }
         } else if (firstNumber != null && currentString == ""){
             operator = null;
-            getDisplay();
         }
+        getDisplay();
         return;
     }
 
@@ -94,6 +99,7 @@ function getDisplay(){
 function round(num){
     return Math.round((num + Number.EPSILON) * 100) / 100;
 }
+
 function operate(firstNumber, secondNumber, operator){
     if (operator == "+") {
         return add(firstNumber, secondNumber);
@@ -124,8 +130,7 @@ function multiply(firstNumber, secondNumber) {
 function divide(firstNumber, secondNumber) {
     if (secondNumber == 0){
         alert("you can't divide by 0!")
-        clear();
-        return;
+        return "divideByZero";
     } else {
         return firstNumber/secondNumber;
     }
