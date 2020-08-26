@@ -79,7 +79,7 @@ function storeOperator(e){
 function getDisplay(){
     var currentDisplay = "";
     if (firstNumber != null) {
-        currentDisplay += firstNumber.toString();
+        currentDisplay += round(firstNumber).toString();
     }
     if (operator != null){
         currentDisplay += operator;
@@ -91,6 +91,9 @@ function getDisplay(){
     document.getElementById("display").innerHTML = currentDisplay;
 }
 
+function round(num){
+    return Math.round((num + Number.EPSILON) * 100) / 100;
+}
 function operate(firstNumber, secondNumber, operator){
     if (operator == "+") {
         return add(firstNumber, secondNumber);
